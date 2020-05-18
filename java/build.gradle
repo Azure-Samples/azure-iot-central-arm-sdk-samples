@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation "com.microsoft.azure.iotcentral.v2018_09_01:azure-mgmt-iotcentral:1.0.0"
+    implementation "com.microsoft.azure:azure:1.30.0"
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.13.0"
+    implementation "org.apache.logging.log4j:log4j-core:2.13.0"
+}
+
+jar {
+    archiveBaseName = 'iotcentral'
+    archiveVersion =  '1.0.0'
+}
+
+apply plugin: 'application'
+
+mainClassName = 'sample.IoTCentralExample'

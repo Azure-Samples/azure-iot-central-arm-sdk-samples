@@ -1,53 +1,62 @@
 ---
 page_type: sample
 languages:
+- nodejs
+- python
 - csharp
+- ruby
+- go
+- java
 products:
-- dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
+- azure-iot-central
+description: "This repository contains samples that show how to create, update, and remove Azure IoT Central applications using Azure Resource Manager and the Azure SDKs."
+urlFragment: "azure-iot-central-arm-sdk-samples"
 ---
 
-# Official Microsoft Sample
+# Azure IoT Central ARM SDK samples
 
-<!-- 
-Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
-
-Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
-
-Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
--->
-
-Give a short description for your sample here. What does it do and why is it important?
+This repository contains samples that show how to create, update, and remove [Azure IoT Central](https://aka.ms/iotcentral) applications using Azure Resource Manager and the Azure SDKs.
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
-
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
+| File/folder           | Description                                |
+|-----------------------|--------------------------------------------|
+| `csharp`              | Sample .NET solution                       |
+| `go`                  | Sample Go project.                         |
+| `java`                | Sample Java project.                       |
+| `nodejs`              | Sample Typescript project.                 |
+| `python`              | Sample Python project.                     |
+| `ruby`                | Sample Ruby project.                       |
+| `.gitignore`          | Define what to ignore at commit time.      |
+| `SECURITY.md`         | Security statement.                        |
+| `CODE_OF_CONDUCT.md` | Microsoft Open Source Code of Conduct.      |
+| `README.md`           | This README file.                          |
+| `LICENSE`             | The license for the samples.               |
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+To run any of the sample code in this repository, you need an active Azure subscription. If you don't have an Azure subscription, create a [free account](https://azure.microsoft.com/free/) before you begin.
 
-## Setup
+The readme file in each language folder gives detailed information about the prerequisites for the language sample.
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+## Setup and run
 
-## Running the sample
-
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+The readme file in each language folder gives detailed information about how to setup and run the language sample.
 
 ## Key concepts
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+[Azure Resource Manager](https://docs.microsoft.com/azure/azure-resource-manager/management/overview) is the deployment and management service for Azure. It provides a management layer that enables you to create, update, and delete resources in your Azure account.
+
+The following table shows the various source repositories and package locations for the Azure SDKs:
+
+| Platform | Source                                        | Package                                                              |
+|----------|-----------------------------------------------|----------------------------------------------------------------------|
+| node     | https://github.com/Azure/azure-sdk-for-node   | https://www.npmjs.com/package/@azure/arm-iotcentral                  |
+| python   | https://github.com/Azure/azure-sdk-for-python | https://pypi.org/project/azure-mgmt-iotcentral                       |
+| .NET     | https://github.com/Azure/azure-sdk-for-net    | https://www.nuget.org/packages/Microsoft.Azure.Management.IotCentral |
+| ruby     | https://github.com/Azure/azure-sdk-for-ruby   | https://rubygems.org/gems/azure_mgmt_iot_central                     |
+| java     | https://github.com/Azure/azure-sdk-for-java   | https://search.maven.org/search?q=a:azure-mgmt-iotcentral            |
+| go       | https://github.com/Azure/azure-sdk-for-go     | https://github.com/Azure/azure-sdk-for-go/                           |
 
 ## Contributing
 
