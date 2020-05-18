@@ -37,11 +37,11 @@ This repository contains samples that show how to create, update, and remove [Az
 
 To run any of the sample code in this repository, you need an active Azure subscription. If you don't have an Azure subscription, create a [free account](https://azure.microsoft.com/free/) before you begin.
 
-The readme file in each language folder gives detailed information about the prerequisites for the language sample.
+The readme file in each language folder gives detailed information about the prerequisites for the sample.
 
 ## Setup and run
 
-The readme file in each language folder gives detailed information about how to setup and run the language sample.
+The readme file in each language folder gives detailed information about how to setup and run the sample.
 
 ## Key concepts
 
