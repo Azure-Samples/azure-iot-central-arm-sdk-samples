@@ -12,15 +12,19 @@ func main() {
 	subscriptionID := ""
 	ioTCentralClient := iotcentral.NewAppsClient(subscriptionID)
 
-	// There are multiple way to authericate with Azure, we picked the device token way which is
-	// Sign in through https://microsoft.com/devicelogin (works for account with 2FA)
-	// Service Principals in Azure AD would get you information for the following
-	// make sure to have your app set for the Redirect URIs, otherwise, it won't work
-	// Check out this article in case you want other ways to authericate https://docs.microsoft.com/en-us/azure/go/azure-sdk-go-authorization
-	// sample code for Authentication with Azure, check this out https://github.com/Azure/azure-sdk-for-go#authentication
+	// Before you begin, please make sure to register an app with Azure Active Directory first.
+	// Follow this article, https://docs.microsoft.com/powerapps/developer/common-data-service/walkthrough-register-app-azure-active-directory
+	// Remember to add Azure Service Management - user_impersonation for API Permission in your registered app.
+	// There are multiple ways to authericate with Azure, we picked the device token way which is
+	// sign in through https://microsoft.com/devicelogin (also works for account with 2FA)
+	// Once you have registered your app, you should be able to get the applicationId and directoryID from there.
+	// Please keep in mind that you need to set "allowPublicClient" as true in your registered app's manifest.
+	// You also need to set the Redirect URIs, otherwise, it won't work.
+	// Check out this article in case you are interested in other ways to authericate https://docs.microsoft.com/azure/go/azure-sdk-go-authorization
+	// sample code for Authentication with Azure, check out this readme, https://github.com/Azure/azure-sdk-for-go#authentication
 	applicationID := "" // client id
-	tenantID := ""
-	deviceConfig := auth.NewDeviceFlowConfig(applicationID, tenantID)
+	directoryID := ""   // tenant id
+	deviceConfig := auth.NewDeviceFlowConfig(applicationID, directoryID)
 	authorizer, authorizerErr := deviceConfig.Authorizer()
 	if authorizerErr == nil {
 		ioTCentralClient.Authorizer = authorizer
