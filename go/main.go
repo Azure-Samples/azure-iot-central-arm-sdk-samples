@@ -14,6 +14,7 @@ func main() {
 
 	// Before you begin, please make sure to register an app with Azure Active Directory first.
 	// Follow this article, https://docs.microsoft.com/powerapps/developer/common-data-service/walkthrough-register-app-azure-active-directory
+	// Remember to add Azure Service Management - user_impersonation for API Permission in your registered app.
 	// There are multiple ways to authericate with Azure, we picked the device token way which is
 	// sign in through https://microsoft.com/devicelogin (also works for account with 2FA)
 	// Once you have registered your app, you should be able to get the applicationId and directoryID from there.
