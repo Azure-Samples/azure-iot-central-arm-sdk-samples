@@ -16,6 +16,7 @@ go get -u github.com/dimchansky/utfbom
 go get -u github.com/mitchellh/go-homedir
 go get -u golang.org/x/crypto/pkcs12
 go get -u github.com/Azure/azure-sdk-for-go
+go get -u github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral
 go build
 ```
 
