@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
@@ -26,21 +27,33 @@ func main() {
 	directoryID := ""   // tenant id
 	deviceConfig := auth.NewDeviceFlowConfig(applicationID, directoryID)
 	authorizer, authorizerErr := deviceConfig.Authorizer()
-	if authorizerErr == nil {
+	if authorizerErr != nil {
+		fmt.Println(authorizerErr)
+		os.Exit(1)
+	} else {
 		ioTCentralClient.Authorizer = authorizer
 	}
 
-	resourceName := "some-app-name"
+	resourceDisplayName := "some app name"
+	resourceDomainName := "some-app-name"
 	resourceGroup := "myResourceGroup"
 	location := "unitedstates"
 	operationInputs := iotcentral.OperationInputs{
-		Name: &resourceName,
+		Name: &resourceDomainName,
 	}
 
-	// check name available
+	// check if the resource domain name is available
 	nameAvailResult, nameAvailErr := ioTCentralClient.CheckNameAvailability(context.Background(), operationInputs)
 	if nameAvailErr != nil {
-		fmt.Println(nameAvailResult.NameAvailable)
+		fmt.Println(nameAvailErr)
+		os.Exit(1)
+	} else if *nameAvailResult.NameAvailable == true {
+		fmt.Println("Resource domain name is available. Let's continue!")
+	} else {
+		fmt.Println("Resource domain name is not available")
+		fmt.Printf("Reason: %v\n", *nameAvailResult.Reason)
+		fmt.Printf("Message: %v\n", *nameAvailResult.Message)
+		os.Exit(1)
 	}
 
 	appSku := iotcentral.ST2
@@ -48,55 +61,72 @@ func main() {
 		Name: appSku,
 	}
 	appProperties := iotcentral.AppProperties{
-		DisplayName: &resourceName,
-		Subdomain:   &resourceName,
+		DisplayName: &resourceDisplayName,
+		Subdomain:   &resourceDomainName,
 	}
 	app := iotcentral.App{
 		AppProperties: &appProperties,
 		Sku:           &appSkuInfo,
-		Name:          &resourceName,
+		Name:          &resourceDomainName,
 		Location:      &location,
 	}
 
 	// create app
-	createResult, createErr := ioTCentralClient.CreateOrUpdate(context.Background(), resourceGroup, resourceName, app)
-	if createErr == nil {
-		fmt.Println(createResult.Response())
+	createResult, createErr := ioTCentralClient.CreateOrUpdate(context.Background(), resourceGroup, resourceDomainName, app)
+	if createErr != nil {
+		fmt.Println(createResult.Status() + " to create/update app")
+		fmt.Println(createErr)
+		os.Exit(1)
+	} else {
+		fmt.Println(createResult.Status() + " to create/update app")
 	}
 
 	// get app
-	getResult, getErr := ioTCentralClient.Get(context.Background(), resourceGroup, resourceName)
-	if getErr == nil {
-		fmt.Println(getResult.ApplicationID)
+	getResult, getErr := ioTCentralClient.Get(context.Background(), resourceGroup, resourceDomainName)
+	if getErr != nil {
+		fmt.Println(getErr)
+		os.Exit(1)
+	} else {
+		fmt.Printf("App id is %v\n", getResult.ApplicationID)
 	}
 
-	updateResourceName := resourceName + "-new-name"
+	updatedResourceDisplayName := resourceDisplayName + "-new-name"
 	updateAppProperties := iotcentral.AppProperties{
-		DisplayName: &updateResourceName,
-		Subdomain:   &resourceName,
+		DisplayName: &updatedResourceDisplayName,
+		Subdomain:   &resourceDomainName,
 	}
 	appPatch := iotcentral.AppPatch{
 		AppProperties: &updateAppProperties,
 	}
 
 	// update app
-	updateResult, updateErr := ioTCentralClient.Update(context.Background(), resourceGroup, resourceName, appPatch)
-	if updateErr == nil {
-		fmt.Println(updateResult.Response())
+	updateResult, updateErr := ioTCentralClient.Update(context.Background(), resourceGroup, resourceDomainName, appPatch)
+	if updateErr != nil {
+		fmt.Println(updateErr)
+		os.Exit(1)
+	} else {
+		fmt.Println(updateResult.Status() + " to update app")
 	}
 
 	// list all apps under the resource group
 	listAppResult, listAppErr := ioTCentralClient.ListByResourceGroup(context.Background(), resourceGroup)
-	if listAppErr == nil {
+	if listAppErr != nil {
+		fmt.Println(listAppErr)
+		os.Exit(1)
+	} else {
+		fmt.Printf("Here are all the iotc app that reside in the %v resource group,\n", resourceGroup)
 		apps := listAppResult.Values()
 		for i := range apps {
-			fmt.Println(*apps[i].AppProperties.DisplayName)
+			fmt.Printf("%v. %v\n", i, *apps[i].AppProperties.DisplayName)
 		}
 	}
 
 	// delete app
-	// deleteAppResult, deleteAppErr := ioTCentralClient.Delete(context.Background(), resourceGroup, resourceName)
-	// if deleteAppErr == nil {
-	// 	fmt.Println(deleteAppResult.Status())
+	// deleteAppResult, deleteAppErr := ioTCentralClient.Delete(context.Background(), resourceGroup, resourceDomainName)
+	// if deleteAppErr != nil {
+	// 	fmt.Println(deleteAppErr)
+	// 	os.Exit(1)
+	// } else {
+	// 	fmt.Println(deleteAppResult.Status() + " to delete app")
 	// }
 }
