@@ -1,6 +1,6 @@
 import * as msRestNodeAuth from "@azure/ms-rest-nodeauth";
 import { IotCentralClient } from "@azure/arm-iotcentral";
-import { App, OperationInputs } from "@azure/arm-iotcentral/src/models/index";
+import { App, OperationInputs, Operation, AppTemplate } from "@azure/arm-iotcentral/src/models/index";
 import { AppPatch } from "@azure/arm-iotcentral/esm/models";
 
 const SUBSCRIPTIONID: string = "FILL IN SUB ID";
@@ -59,6 +59,18 @@ async function listAllAppsByResourceGroup(client): Promise<IotCentralClient> {
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
 
+async function retrieveOperations(client): Promise<IotCentralClient> {
+    const result: [Operation] = await client.operations.list();
+    console.log(result);
+    return new Promise<IotCentralClient>(resolve => resolve(client));
+}
+
+async function retrieveAppTemplates(client): Promise<IotCentralClient> {
+    const result: [AppTemplate] = await client.apps.listTemplates();
+    console.log(result);
+    return new Promise<IotCentralClient>(resolve => resolve(client));
+}
+
 // async function deleteApp(client): Promise<IotCentralClient> {
 //     const result = await client.apps.deleteMethod(RESOURCEGROUPNAME, RESOURCENAME);
 //     console.log(result);
@@ -71,6 +83,8 @@ login()
     .then(retrieveAppInfo)
     .then(updateApp)
     .then(listAllAppsByResourceGroup)
+    .then(retrieveOperations)
+    .then(retrieveAppTemplates)
     // .then(deleteApp)
     .then(() => {
         console.log("done");
