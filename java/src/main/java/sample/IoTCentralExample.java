@@ -12,10 +12,14 @@ import com.microsoft.azure.management.iotcentral.v2018_09_01.App;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.AppPatch;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.AppSku;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.AppSkuInfo;
+import com.microsoft.azure.management.iotcentral.v2018_09_01.Operation;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.OperationInputs;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.AppAvailabilityInfo;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.AppInner;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.AppsInner;
+import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.AppTemplateInner;
+import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.OperationInner;
+import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.OperationsInner;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.IoTCentralManager;
 import com.microsoft.azure.management.iotcentral.v2018_09_01.implementation.IotCentralClientImpl;
 
@@ -54,7 +58,7 @@ public class IoTCentralExample {
         app.withDisplayName(resourceName);
         app.withSubdomain(resourceName);
         app.withLocation("unitedstates");
-        AppSku appSku = new AppSku().fromString("ST1");
+        AppSku appSku = new AppSku().fromString("ST2");
         AppSkuInfo appSkuInfo = new AppSkuInfo().withName(appSku);
         app.withSku(appSkuInfo);
 
@@ -82,6 +86,19 @@ public class IoTCentralExample {
             System.out.println(eachApp.displayName());
         }
 
+        // list all the operations for iotc
+        OperationsInner operationsInner = new OperationsInner(restClient.retrofit(), iotCentralClientImpl);
+        PagedList<OperationInner> operations = operationsInner.list();
+        for(OperationInner eachOperation : operations) {
+            System.out.println(eachOperation.name());
+        }
+
+        // list all the app templates in iotc
+        PagedList<AppTemplateInner> appTemplates = appsInner.listTemplates();
+        for(AppTemplateInner eachAppTemplate : appTemplates) {
+            System.out.println(eachAppTemplate.name());
+        }
+        
         // delete app
         // appsInner.delete(resourceGroupName, resourceName);
     }
