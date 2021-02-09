@@ -10,9 +10,6 @@ subId = "FILL IN SUB ID"
 appName = "iot-central-app-tocreate"
 resourceGroup = "myResourceGroup"
 
-print(creds[0])
-print(creds[1])
-
 client = IotCentralClient(creds[0], subId)
 
 result = client.apps.check_name_availability(appName)
@@ -20,11 +17,9 @@ print(result)
 
 app = App(location="unitedstates", sku=AppSkuInfo(name="ST2"))
 app.subdomain = appName
-
 app.display_name = appName
 
-createResult = client.apps.create_or_update(resourceGroup, appName, app)
-print(createResult)
+client.apps.create_or_update(resourceGroup, appName, app)
 
 getResult = client.apps.get(resourceGroup, appName)
 print(getResult)
@@ -32,13 +27,20 @@ print(getResult)
 updateApp = AppPatch()
 updateApp.display_name = appName + "-new-name"
 
-updateResult = client.apps.update(resourceGroup, appName, updateApp)
-print(updateResult)
+client.apps.update(resourceGroup, appName, updateApp)
 
 appsInGroup = client.apps.list_by_resource_group(resourceGroup)
-
 appsInGroup.next()
 for item in appsInGroup.current_page:
+    print(item)
+
+operations = client.operations.list()
+operations.next()
+for item in operations.current_page:
+    print(item)
+
+appTemplates = client.apps.list_templates()
+for item in appTemplates:
     print(item)
 
 # deleteResult = client.apps.delete(resourceGroup, appName)
