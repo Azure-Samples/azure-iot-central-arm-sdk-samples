@@ -28,33 +28,53 @@ namespace IoTCentralArmSDK
             app.Subdomain = name;
             app.DisplayName = name;
 
-            Console.WriteLine("Check if the app name is available");
+            Console.WriteLine("===Check if the app name is available");
             OperationInputs input = new OperationInputs(name);
-            var nameAvailable = client.Apps.CheckNameAvailability(input);
-            Console.WriteLine(nameAvailable.Message);
+            var appNameAvailability = client.Apps.CheckNameAvailability(input);
+            
+            if (appNameAvailability.NameAvailable == true) {
+                Console.WriteLine("app name is available!");
+            } else {
+                Console.WriteLine($"app name isn't available because {appNameAvailability.Reason}");
+            }
 
-            Console.WriteLine("Creating the app");
-            client.Apps.CreateOrUpdate(resourceGroup, name, app);
+            Console.WriteLine("===Creating the app");
+            var createApp = client.Apps.CreateOrUpdate(resourceGroup, name, app);
+            Console.WriteLine(createApp.Name);
+            Console.WriteLine(createApp.DisplayName);
 
-            Console.WriteLine("Getting the app");
+            Console.WriteLine("===Getting the app");
             var resultApp = client.Apps.Get(resourceGroup, name);
-            Console.WriteLine(resultApp);
+            Console.WriteLine(resultApp.Name);
+            Console.WriteLine(resultApp.DisplayName);
 
-            Console.WriteLine("Updating the app");
+            Console.WriteLine("===Updating the app");
             var updateApp = new AppPatch();
             updateApp.DisplayName = name + "-new-name";
             var updateResult = client.Apps.Update(resourceGroup, name, updateApp);
-            Console.WriteLine(updateResult);
+            Console.WriteLine(updateResult.Name);
+            Console.WriteLine(updateResult.DisplayName);
 
-            Console.WriteLine("Listing apps");
+            Console.WriteLine($"===Listing all the apps under the resource group of {resourceGroup}");
             foreach (var currentApp in client.Apps.ListByResourceGroup(resourceGroup))
             {
                 Console.WriteLine($"{currentApp.DisplayName} ({currentApp.Id})");
             }
 
-            Console.WriteLine(Environment.NewLine);
-            // Console.WriteLine("Removing app");
-            // client.Apps.Delete(resourceGroup, name);
+            Console.WriteLine("===Listing all the operations in iotc");
+            foreach (var currentOperation in client.Operations.List())
+            {
+                Console.WriteLine(currentOperation.Name);
+            }
+
+            Console.WriteLine("===Listing all the app templates in iotc");
+            foreach (var currentAppTemplate in client.Apps.ListTemplates())
+            {
+                Console.WriteLine(currentAppTemplate.Name);
+            }
+
+            Console.WriteLine("===Removing app");
+            client.Apps.Delete(resourceGroup, name);
 
             Console.WriteLine("Done");
         }
