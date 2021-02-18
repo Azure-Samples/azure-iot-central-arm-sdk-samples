@@ -12,6 +12,7 @@ import (
 func main() {
 	subscriptionID := ""
 	ioTCentralClient := iotcentral.NewAppsClient(subscriptionID)
+	operationsClient := iotcentral.NewOperationsClient(subscriptionID)
 
 	// Before you begin, please make sure to register an app with Azure Active Directory first.
 	// Follow this article, https://docs.microsoft.com/powerapps/developer/common-data-service/walkthrough-register-app-azure-active-directory
@@ -32,6 +33,7 @@ func main() {
 		os.Exit(1)
 	} else {
 		ioTCentralClient.Authorizer = authorizer
+		operationsClient.Authorizer = authorizer
 	}
 
 	resourceDisplayName := "some app name"
@@ -87,7 +89,7 @@ func main() {
 		fmt.Println(getErr)
 		os.Exit(1)
 	} else {
-		fmt.Printf("App id is %v\n", getResult.ApplicationID)
+		fmt.Printf("App id is %v\n", *getResult.ApplicationID)
 	}
 
 	updatedResourceDisplayName := resourceDisplayName + "-new-name"
@@ -118,6 +120,32 @@ func main() {
 		apps := listAppResult.Values()
 		for i := range apps {
 			fmt.Printf("%v. %v\n", i, *apps[i].AppProperties.DisplayName)
+		}
+	}
+
+	// list all the operations that is supported by iotc
+	operationsResult, operationsErr := operationsClient.List(context.Background())
+	if operationsErr != nil {
+		fmt.Println(operationsErr)
+		os.Exit(1)
+	} else {
+		fmt.Print("Here are all the supported operations in the iotc,\n")
+		operations := operationsResult.Values()
+		for i := range operations {
+			fmt.Printf("%v. %v\n", i, *operations[i].Display.Operation)
+		}
+	}
+
+	// list all the iotc app templates
+	appTemplatesResult, appTemplatesErr := ioTCentralClient.ListTemplates(context.Background())
+	if appTemplatesErr != nil {
+		fmt.Println(appTemplatesErr)
+		os.Exit(1)
+	} else {
+		fmt.Print("Here are all the iotc app templates,\n")
+		appTemplates := appTemplatesResult.Values()
+		for i := range appTemplates {
+			fmt.Printf("%v. %v\n", i, *appTemplates[i].Name)
 		}
 	}
 
