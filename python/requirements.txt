@@ -1,2 +1,2 @@
 ﻿azure-cli-core==2.5.1
-azure-mgmt-iotcentral==4.0.0
+azure-mgmt-iotcentral==4.1.0
