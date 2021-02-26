@@ -33,6 +33,7 @@ app.sku = skuInfo
 
 c = Azure::IotCentral::Profiles::Latest::Mgmt::Client::new(options)
 apps =  Azure::IotCentral::Mgmt::V2018_09_01::Apps::new(c)
+operations = Azure::IotCentral::Mgmt::V2018_09_01::Operations::new(c)
 
 # check if the name available
 operationInputs = Azure::IotCentral::Mgmt::V2018_09_01::Models::OperationInputs::new()
@@ -58,6 +59,14 @@ pp updateApp
 # list apps under the resource group
 result = apps.list_by_resource_group(resourceGroup)
 pp result
+
+# list all the operations in iotc
+operations = operations.list()
+pp operations
+
+# list all the app templates in iotc
+templates = apps.list_templates()
+pp templates
 
 # delete app
 # deleteResult = apps.delete(resourceGroup, name)
