@@ -24,7 +24,7 @@ This repository contains samples that show how to create, update, and remove [Az
 | `csharp`              | Sample .NET solution                       |
 | `go`                  | Sample Go project.                         |
 | `java`                | Sample Java project.                       |
-| `nodejs`              | Sample Typescript project.                 |
+| `nodejs`              | Sample TypeScript project.                 |
 | `python`              | Sample Python project.                     |
 | `ruby`                | Sample Ruby project.                       |
 | `.gitignore`          | Define what to ignore at commit time.      |
