@@ -1,7 +1,6 @@
 # Azure IoT Central Java SDK Samples for Management APIs
 
 Sample code for using Azure IoT Central Management Plane APIs.
-Sample code for using [com.microsoft.azure.iotcentral.v2018_09_01:azure-mgmt-iotcentral](https://search.maven.org/artifact/com.microsoft.azure.iotcentral.v2018_09_01/azure-mgmt-iotcentral/1.0.0/jar) SDK provided by [Microsoft Azure](https://github.com/Azure). This sample code will check if the resource name is available, create or update an app, retrieve app information, update app, list all the apps that belongs to the specific resource group, and finally delete the app if uncommented.
 
 ## Get started
 
