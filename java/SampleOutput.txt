@@ -1,0 +1,110 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --< com.microsoft.azure.iotcentral:azure-iot-central-java-sdk-samples >--
+[INFO] Building azure-iot-central-java-sdk-samples 2.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ azure-iot-central-java-sdk-samples ---
+[INFO] Deleting C:\code\final\azure-iot-central-arm-sdk-samples\java\target
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ azure-iot-central-java-sdk-samples ---
+[WARNING] Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\code\final\azure-iot-central-arm-sdk-samples\java\src\main\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.7.0:compile (default-compile) @ azure-iot-central-java-sdk-samples ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding Cp1252, i.e. build is platform dependent!
+[INFO] Compiling 3 source files to C:\code\final\azure-iot-central-arm-sdk-samples\java\target\classes
+[INFO] 
+[INFO] --- exec-maven-plugin:1.6.0:java (default-cli) @ azure-iot-central-java-sdk-samples ---
+------------------
+Operations List:
+------------------
+
+Microsoft.IoTCentral/IoTApps/read
+Microsoft.IoTCentral/IoTApps/write
+Microsoft.IoTCentral/IoTApps/delete
+Microsoft.IoTCentral/checkNameAvailability/action
+Microsoft.IoTCentral/checkSubdomainAvailability/action
+Microsoft.IoTCentral/operations/read
+Microsoft.IoTCentral/appTemplates/action
+Microsoft.IoTCentral/register/action
+Microsoft.IoTCentral/IoTApps/providers/Microsoft.Insights/metricDefinitions/read
+Microsoft.IoTCentral/IoTApps/providers/Microsoft.Insights/diagnosticSettings/read
+Microsoft.IoTCentral/IoTApps/providers/Microsoft.Insights/diagnosticSettings/write
+
+------------------
+IOT Central App Templates:
+------------------
+
+iotc-condition
+iotc-consumption
+iotc-distribution
+iotc-inventory
+iotc-logistics
+iotc-meter
+iotc-mfc
+iotc-patient
+iotc-pnp-preview
+iotc-power
+iotc-quality
+iotc-store
+iotc-video-analytics-om
+iotc-waste
+
+------------------
+Apps in Resource Group:
+------------------
+
+Name:gaviswanapp21636580090, Location: eastus
+Name:gtest1, Location: westus
+Name:gaviswanapp21636578314, Location: eastus
+
+------------------
+Create/Update App:
+------------------
+
+randomizedName: gaviswanapp21636580731
+App created successfully.
+------------------
+Get App:
+------------------
+
+Name:gaviswanapp21636580731, Location: eastus, com.azure.resourcemanager.iotcentral.implementation.AppImpl@2df8aa39
+
+------------------
+Update App:
+------------------
+
+App updated successfully.
+
+------------------
+Delete App:
+------------------
+
+App deleted!
+
+------------------
+Validating Exceptions:
+------------------
+
+randomizedName: gaviswanapp21636580772
+Validated error with use of geo location.
+------------------
+Validating Exceptions:
+------------------
+
+randomizedName: gaviswanapp21636580772
+Validated error with invalid sku 'S1'.
+------------------
+Validating Exceptions:
+------------------
+
+randomizedName: gaviswanapp21636580775
+Validated error with F1 sku.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  53.902 s
+[INFO] Finished at: 2021-11-10T13:46:18-08:00
+[INFO] ------------------------------------------------------------------------
