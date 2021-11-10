@@ -8,7 +8,7 @@ Sample code for using [com.microsoft.azure.iotcentral.v2018_09_01:azure-mgmt-iot
 ### Prerequisites
 - [Java JDK or JRE](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 - [Maven](http://maven.apache.org/install.html)
-- A service principal and a resource group to work with. Follow [these instructions](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).
+- A service principal and a resource group to work with. Follow [these instructions](https://docs.microsoft.com/azure/active-directory/develop/howto-create-service-principal-portal).
 
 ### SDK version
 
