@@ -16,7 +16,7 @@ go get -u github.com/dimchansky/utfbom
 go get -u github.com/mitchellh/go-homedir
 go get -u golang.org/x/crypto/pkcs12
 go get -u github.com/Azure/azure-sdk-for-go
-go get -u github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral
+go get -u github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2021-06-01/iotcentral
 go build
 ```
 
@@ -27,4 +27,4 @@ Make sure you head over to the main.go file to change the configuration to the o
 .\go.exe
 ```
 
-Ever wonder what Azure SDK for Go provide in terms of iotcentral? Check [this](https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral) out.
+Ever wonder what Azure SDK for Go provide in terms of iotcentral? Check [this](https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2021-06-01/iotcentral) out.
