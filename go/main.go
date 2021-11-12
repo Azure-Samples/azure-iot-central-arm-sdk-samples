@@ -37,8 +37,8 @@ func main() {
 		operationsClient.Authorizer = authorizer
 	}
 
-	resourceDisplayName := "chris-test2"
-	resourceDomainName := "kjdfksnmsd"
+	resourceDisplayName := "resource-display-name"
+	resourceDomainName := "resource-unique-url-id"
 	resourceGroup := "myResourceGroup"
 	location := "eastus2"
 	operationInputs := iotcentral.OperationInputs{
