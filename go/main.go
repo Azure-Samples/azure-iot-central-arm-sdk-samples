@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral"
+	"github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2021-06-01/iotcentral"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 )
 
 func main() {
-	subscriptionID := ""
+	subscriptionID := "add-subscription-id-here"
 	ioTCentralClient := iotcentral.NewAppsClient(subscriptionID)
 	operationsClient := iotcentral.NewOperationsClient(subscriptionID)
 
@@ -24,11 +24,12 @@ func main() {
 	// You also need to set the Redirect URIs, otherwise, it won't work.
 	// Check out this article in case you are interested in other ways to authericate https://docs.microsoft.com/azure/go/azure-sdk-go-authorization
 	// sample code for Authentication with Azure, check out this readme, https://github.com/Azure/azure-sdk-for-go#authentication
-	applicationID := "" // client id
-	directoryID := ""   // tenant id
+	applicationID := "add-app-id-here" // client id
+	directoryID := "add-directory-id-here"   // tenant id
 	deviceConfig := auth.NewDeviceFlowConfig(applicationID, directoryID)
 	authorizer, authorizerErr := deviceConfig.Authorizer()
 	if authorizerErr != nil {
+		fmt.Println("Error authorizing.")
 		fmt.Println(authorizerErr)
 		os.Exit(1)
 	} else {
@@ -36,10 +37,10 @@ func main() {
 		operationsClient.Authorizer = authorizer
 	}
 
-	resourceDisplayName := "some app name"
-	resourceDomainName := "some-app-name"
+	resourceDisplayName := "resource-display-name"
+	resourceDomainName := "resource-unique-url-id"
 	resourceGroup := "myResourceGroup"
-	location := "unitedstates"
+	location := "eastus2"
 	operationInputs := iotcentral.OperationInputs{
 		Name: &resourceDomainName,
 	}
@@ -58,7 +59,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	appSku := iotcentral.ST2
+	appInvalidSkuInfo := iotcentral.AppSkuInfo{
+		Name: "S1",
+	}
+	appSku := iotcentral.AppSkuST2
 	appSkuInfo := iotcentral.AppSkuInfo{
 		Name: appSku,
 	}
@@ -66,11 +70,32 @@ func main() {
 		DisplayName: &resourceDisplayName,
 		Subdomain:   &resourceDomainName,
 	}
+	appIdentity := iotcentral.SystemAssignedServiceIdentity{
+		Type: iotcentral.SystemAssignedServiceIdentityTypeSystemAssigned,
+	}
 	app := iotcentral.App{
 		AppProperties: &appProperties,
 		Sku:           &appSkuInfo,
 		Name:          &resourceDomainName,
 		Location:      &location,
+		Identity:      &appIdentity,
+	}
+	appInvalidSku := iotcentral.App{
+		AppProperties: &appProperties,
+		Sku:           &appInvalidSkuInfo,
+		Name:          &resourceDomainName,
+		Location:      &location,
+		Identity:      &appIdentity,
+	}
+
+	// fail to create invalid sku app
+	failCreateResult, failCreateErr := ioTCentralClient.CreateOrUpdate(context.Background(), resourceGroup, resourceDomainName, appInvalidSku)
+	if failCreateErr != nil {
+		fmt.Println(failCreateResult.Status() + " to create/update invalid app")
+		fmt.Println(failCreateErr)
+	} else {
+		fmt.Println(failCreateResult.Status() + " to create/update invalid app")
+		os.Exit(1)
 	}
 
 	// create app
@@ -150,11 +175,11 @@ func main() {
 	}
 
 	// delete app
-	// deleteAppResult, deleteAppErr := ioTCentralClient.Delete(context.Background(), resourceGroup, resourceDomainName)
-	// if deleteAppErr != nil {
-	// 	fmt.Println(deleteAppErr)
-	// 	os.Exit(1)
-	// } else {
-	// 	fmt.Println(deleteAppResult.Status() + " to delete app")
-	// }
+	deleteAppResult, deleteAppErr := ioTCentralClient.Delete(context.Background(), resourceGroup, resourceDomainName)
+	if deleteAppErr != nil {
+		fmt.Println(deleteAppErr)
+		os.Exit(1)
+	} else {
+		fmt.Println(deleteAppResult.Status() + " to delete app")
+	}
 }
