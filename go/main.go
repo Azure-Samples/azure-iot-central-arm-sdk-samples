@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2021-06-01/iotcentral"
+	"github.com/Azure/azure-sdk-for-go/services/preview/iotcentral/mgmt/2021-11-01-preview/iotcentral"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 )
 
@@ -13,6 +13,8 @@ func main() {
 	subscriptionID := "add-subscription-id-here"
 	ioTCentralClient := iotcentral.NewAppsClient(subscriptionID)
 	operationsClient := iotcentral.NewOperationsClient(subscriptionID)
+	privateEndpointClient := iotcentral.NewPrivateEndpointConnectionsClient(subscriptionID)
+	privateLinksClient := iotcentral.NewPrivateLinksClient(subscriptionID)
 
 	// Before you begin, please make sure to register an app with Azure Active Directory first.
 	// Follow this article, https://docs.microsoft.com/powerapps/developer/common-data-service/walkthrough-register-app-azure-active-directory
@@ -24,7 +26,8 @@ func main() {
 	// You also need to set the Redirect URIs, otherwise, it won't work.
 	// Check out this article in case you are interested in other ways to authericate https://docs.microsoft.com/azure/go/azure-sdk-go-authorization
 	// sample code for Authentication with Azure, check out this readme, https://github.com/Azure/azure-sdk-for-go#authentication
-	applicationID := "add-app-id-here" // client id
+
+	applicationID := "add-app-id-here"    // client id
 	directoryID := "add-directory-id-here"   // tenant id
 	deviceConfig := auth.NewDeviceFlowConfig(applicationID, directoryID)
 	authorizer, authorizerErr := deviceConfig.Authorizer()
@@ -35,6 +38,8 @@ func main() {
 	} else {
 		ioTCentralClient.Authorizer = authorizer
 		operationsClient.Authorizer = authorizer
+		privateEndpointClient.Authorizer = authorizer
+		privateLinksClient.Authorizer = authorizer
 	}
 
 	resourceDisplayName := "resource-display-name"
@@ -118,9 +123,29 @@ func main() {
 	}
 
 	updatedResourceDisplayName := resourceDisplayName + "-new-name"
+	updatePublicNetworkAccessValues := iotcentral.PossiblePublicNetworkAccessValues()[1] // publicNetworkAccessEnabled
+	possibleNetworkActionValues := iotcentral.PossibleNetworkActionValues()[0] // NetworkActionAllow
+	filterName := "Localhost"
+	ipMask := "127.0.0.1"
+	ipRulesArray := [] iotcentral.NetworkRuleSetIPRule{ 
+		{
+			FilterName: &filterName,
+			IPMask: &ipMask,
+		},
+	}
+	applyToDevices := true
+	applyToIOTCentral := false
+	updateNetworkRuleSets := iotcentral.NetworkRuleSets{
+		ApplyToDevices: &applyToDevices,
+		ApplyToIoTCentral: &applyToIOTCentral,
+		DefaultAction: possibleNetworkActionValues,
+		IPRules: &ipRulesArray,
+	}
 	updateAppProperties := iotcentral.AppProperties{
 		DisplayName: &updatedResourceDisplayName,
 		Subdomain:   &resourceDomainName,
+		PublicNetworkAccess: updatePublicNetworkAccessValues,
+		NetworkRuleSets: &updateNetworkRuleSets,
 	}
 	appPatch := iotcentral.AppPatch{
 		AppProperties: &updateAppProperties,
@@ -174,12 +199,38 @@ func main() {
 		}
 	}
 
-	// delete app
-	deleteAppResult, deleteAppErr := ioTCentralClient.Delete(context.Background(), resourceGroup, resourceDomainName)
-	if deleteAppErr != nil {
-		fmt.Println(deleteAppErr)
+	// list all private endpoint connections
+	privateEndpointResult, privateEndpointErr := privateEndpointClient.List(context.Background(), resourceGroup, resourceDomainName)
+	if privateEndpointErr != nil {
+		fmt.Println(privateEndpointErr)
 		os.Exit(1)
 	} else {
-		fmt.Println(deleteAppResult.Status() + " to delete app")
+		fmt.Print("Here are all the private endpoint connections in your app,\n")
+		privateEndpoint := *privateEndpointResult.Value
+		for i := range privateEndpoint {
+			fmt.Printf("%v. %v. %v\n", i, *privateEndpoint[i].Name, *privateEndpoint[i].ID)
+		}
 	}
+
+	// list all private links
+	privateLinksResult, privateLinksErr := privateLinksClient.List(context.Background(), resourceGroup, resourceDomainName)
+	if privateLinksErr != nil {
+		fmt.Println(privateLinksErr)
+		os.Exit(1)
+	} else {
+		fmt.Print("Here are all the private links in your app,\n")
+		privateLinks := *privateLinksResult.Value
+		for i := range privateLinks {
+			fmt.Printf("%v. %v. %v\n", i, *privateLinks[i].Name, *privateLinks[i].ID, )
+		}
+	}
+
+	// delete app
+	// deleteAppResult, deleteAppErr := ioTCentralClient.Delete(context.Background(), resourceGroup, resourceDomainName)
+	// if deleteAppErr != nil {
+	// 	fmt.Println(deleteAppErr)
+	// 	os.Exit(1)
+	// } else {
+	// 	fmt.Println(deleteAppResult.Status() + " to delete app")
+	// } 
 }
