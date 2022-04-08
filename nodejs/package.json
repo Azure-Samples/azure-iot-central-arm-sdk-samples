@@ -10,8 +10,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@azure/arm-iotcentral": "^4.1.0",
-        "@azure/ms-rest-nodeauth": "^3.0.3",
+        "@azure/arm-iotcentral": "^6.0.0",
+        "@azure/identity": "^2.0.4",
         "azure-arm-resource": "^7.3.0",
         "ms-rest-azure": "^3.0.0"
     }
