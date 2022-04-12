@@ -51,7 +51,7 @@ The following table shows the various source repositories and package locations 
 
 | Platform | Source                                        | Package                                                              |
 |----------|-----------------------------------------------|----------------------------------------------------------------------|
-| js     | https://github.com/Azure/azure-sdk-for-js   | https://www.npmjs.com/package/@azure/arm-iotcentral                  |
+| javascript     | https://github.com/Azure/azure-sdk-for-js   | https://www.npmjs.com/package/@azure/arm-iotcentral                  |
 | python   | https://github.com/Azure/azure-sdk-for-python | https://pypi.org/project/azure-mgmt-iotcentral                       |
 | .NET     | https://github.com/Azure/azure-sdk-for-net    | https://www.nuget.org/packages/Microsoft.Azure.Management.IotCentral |
 | ruby     | https://github.com/Azure/azure-sdk-for-ruby   | https://rubygems.org/gems/azure_mgmt_iot_central                     |

@@ -1,4 +1,4 @@
-import { DeviceCodeCredential }  from "@azure/identity";
+import { InteractiveBrowserCredential }  from "@azure/identity";
 import { IotCentralClient } from "@azure/arm-iotcentral";
 import { App, OperationInputs, Operation, AppTemplate } from "@azure/arm-iotcentral/src/models/index";
 import { AppPatch } from "@azure/arm-iotcentral/esm/models";
@@ -24,7 +24,7 @@ const UPDATEAPP: AppPatch = {
 };
 
 async function login() {
-    const creds = new DeviceCodeCredential();
+    const creds = new InteractiveBrowserCredential();
     return new Promise(resolve => resolve(creds));
 }
 
