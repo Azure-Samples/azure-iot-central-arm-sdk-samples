@@ -1,7 +1,5 @@
-from turtle import up
 from azure.mgmt.iotcentral import IotCentralClient
 from azure.mgmt.iotcentral.models import App, AppSkuInfo, AppPatch, OperationInputs, SystemAssignedServiceIdentity, SystemAssignedServiceIdentityType, PublicNetworkAccess, NetworkRuleSets, NetworkAction
-# from azure.common.credentials import UserPassCredentials, get_azure_cli_credentials
 from azure.identity import DefaultAzureCredential
 
 # login with az login
