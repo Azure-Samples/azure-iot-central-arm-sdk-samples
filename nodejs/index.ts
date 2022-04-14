@@ -1,4 +1,4 @@
-import * as msRestNodeAuth from "@azure/ms-rest-nodeauth";
+import { InteractiveBrowserCredential }  from "@azure/identity";
 import { IotCentralClient } from "@azure/arm-iotcentral";
 import { App, OperationInputs, Operation, AppTemplate } from "@azure/arm-iotcentral/src/models/index";
 import { AppPatch } from "@azure/arm-iotcentral/esm/models";
@@ -23,9 +23,9 @@ const UPDATEAPP: AppPatch = {
     displayName: RESOURCENAME + "-new-name"
 };
 
-async function login(): Promise<msRestNodeAuth.DeviceTokenCredentials> {
-    const creds = await msRestNodeAuth.interactiveLogin();
-    return new Promise<msRestNodeAuth.DeviceTokenCredentials>(resolve => resolve(creds));
+async function login() {
+    const creds = new InteractiveBrowserCredential();
+    return new Promise(resolve => resolve(creds));
 }
 
 async function checkIfNameExist(creds): Promise<IotCentralClient> {
@@ -36,7 +36,7 @@ async function checkIfNameExist(creds): Promise<IotCentralClient> {
 }
 
 async function createOrUpdateApp(client): Promise<IotCentralClient> {
-    const result = await client.apps.createOrUpdate(RESOURCEGROUPNAME, RESOURCENAME, NEWAPP);
+    const result = await client.apps.beginCreateOrUpdateAndWait(RESOURCEGROUPNAME, RESOURCENAME, NEWAPP);
     console.log(result);
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
@@ -48,25 +48,34 @@ async function retrieveAppInfo(client): Promise<IotCentralClient> {
 }
 
 async function updateApp(client): Promise<IotCentralClient> {
-    const result = await client.apps.update(RESOURCEGROUPNAME, RESOURCENAME, UPDATEAPP);
+    const result = await client.apps.beginUpdateAndWait(RESOURCEGROUPNAME, RESOURCENAME, UPDATEAPP);
     console.log(result);
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
 
 async function listAllAppsByResourceGroup(client): Promise<IotCentralClient> {
-    const result = await client.apps.listByResourceGroup(RESOURCEGROUPNAME);
+    const result = [];
+    for await (let item of client.apps.listByResourceGroup(RESOURCEGROUPNAME)){
+        result.push(item);
+    };
     console.log(result);
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
 
 async function retrieveOperations(client): Promise<IotCentralClient> {
-    const result: [Operation] = await client.operations.list();
+    const result = [];
+    for await (let item of client.operations.list()){
+        result.push(item);
+    };
     console.log(result);
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
 
 async function retrieveAppTemplates(client): Promise<IotCentralClient> {
-    const result: [AppTemplate] = await client.apps.listTemplates();
+    const result = [];
+    for await (let item of client.apps.listTemplates()){
+        result.push(item);
+    };
     console.log(result);
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
