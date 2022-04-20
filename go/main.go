@@ -27,8 +27,8 @@ func main() {
 	// Check out this article in case you are interested in other ways to authericate https://docs.microsoft.com/azure/go/azure-sdk-go-authorization
 	// sample code for Authentication with Azure, check out this readme, https://github.com/Azure/azure-sdk-for-go#authentication
 
-	applicationID := "add-app-id-here"    // client id
-	directoryID := "add-directory-id-here"   // tenant id
+	applicationID := "add-app-id-here" // client id
+	directoryID := "add-directory-id-here" // tenant id
 	deviceConfig := auth.NewDeviceFlowConfig(applicationID, directoryID)
 	authorizer, authorizerErr := deviceConfig.Authorizer()
 	if authorizerErr != nil {
@@ -123,11 +123,11 @@ func main() {
 	}
 
 	updatedResourceDisplayName := resourceDisplayName + "-new-name"
-	updatePublicNetworkAccessValues := iotcentral.PossiblePublicNetworkAccessValues()[1] // publicNetworkAccessEnabled
-	possibleNetworkActionValues := iotcentral.PossibleNetworkActionValues()[0] // NetworkActionAllow
+	publicNetworkAccessEnabled := iotcentral.PossiblePublicNetworkAccessValues()[1]
+	networkActionAllow := iotcentral.PossibleNetworkActionValues()[0]
 	filterName := "Localhost"
 	ipMask := "127.0.0.1"
-	ipRulesArray := [] iotcentral.NetworkRuleSetIPRule{ 
+	ipRulesArray := [] iotcentral.NetworkRuleSetIPRule{
 		{
 			FilterName: &filterName,
 			IPMask: &ipMask,
@@ -138,13 +138,13 @@ func main() {
 	updateNetworkRuleSets := iotcentral.NetworkRuleSets{
 		ApplyToDevices: &applyToDevices,
 		ApplyToIoTCentral: &applyToIOTCentral,
-		DefaultAction: possibleNetworkActionValues,
+		DefaultAction: networkActionAllow,
 		IPRules: &ipRulesArray,
 	}
 	updateAppProperties := iotcentral.AppProperties{
 		DisplayName: &updatedResourceDisplayName,
 		Subdomain:   &resourceDomainName,
-		PublicNetworkAccess: updatePublicNetworkAccessValues,
+		PublicNetworkAccess: publicNetworkAccessEnabled,
 		NetworkRuleSets: &updateNetworkRuleSets,
 	}
 	appPatch := iotcentral.AppPatch{
@@ -179,7 +179,7 @@ func main() {
 		fmt.Println(operationsErr)
 		os.Exit(1)
 	} else {
-		fmt.Print("Here are all the supported operations in the iotc,\n")
+		fmt.Println("Here are all the supported operations in the iotc,")
 		operations := operationsResult.Values()
 		for i := range operations {
 			fmt.Printf("%v. %v\n", i, *operations[i].Display.Operation)
@@ -192,7 +192,7 @@ func main() {
 		fmt.Println(appTemplatesErr)
 		os.Exit(1)
 	} else {
-		fmt.Print("Here are all the iotc app templates,\n")
+		fmt.Println("Here are all the iotc app templates,")
 		appTemplates := appTemplatesResult.Values()
 		for i := range appTemplates {
 			fmt.Printf("%v. %v\n", i, *appTemplates[i].Name)
@@ -205,7 +205,7 @@ func main() {
 		fmt.Println(privateEndpointErr)
 		os.Exit(1)
 	} else {
-		fmt.Print("Here are all the private endpoint connections in your app,\n")
+		fmt.Println("Here are all the private endpoint connections in your app,")
 		privateEndpoint := *privateEndpointResult.Value
 		for i := range privateEndpoint {
 			fmt.Printf("%v. %v. %v\n", i, *privateEndpoint[i].Name, *privateEndpoint[i].ID)
@@ -218,10 +218,10 @@ func main() {
 		fmt.Println(privateLinksErr)
 		os.Exit(1)
 	} else {
-		fmt.Print("Here are all the private links in your app,\n")
+		fmt.Println("Here are all the private links in your app,")
 		privateLinks := *privateLinksResult.Value
 		for i := range privateLinks {
-			fmt.Printf("%v. %v. %v\n", i, *privateLinks[i].Name, *privateLinks[i].ID, )
+			fmt.Printf("%v. %v. %v\n", i, *privateLinks[i].Name, *privateLinks[i].ID)
 		}
 	}
 
