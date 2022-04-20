@@ -1,6 +1,6 @@
 # Azure IoT Central ARM Node.js SDK samples
 
-Sample code for using [@azure/arm-iotcentral](https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/iotcentral/arm-iotcentral)  SDK provided by [Microsoft Azure](https://github.com/Azure). This sample code will check if the resource name is available, create or update an app, retrieve app information, update app, list all the apps that belongs to the specific resource group, and finally delete the app if uncommented.
+Sample code for using [@azure/arm-iotcentral](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/iotcentral/arm-iotcentral)  SDK provided by [Microsoft Azure](https://github.com/Azure). This sample code will check if the resource name is available, create or update an app, retrieve app information, update app, list all the apps that belongs to the specific resource group, and finally delete the app if uncommented.
 
 ## Get started
 

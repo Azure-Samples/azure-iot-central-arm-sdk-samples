@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.Arrays;
+
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
@@ -7,12 +9,18 @@ import com.azure.resourcemanager.iotcentral.models.App;
 import com.azure.resourcemanager.iotcentral.models.AppSku;
 import com.azure.resourcemanager.iotcentral.models.AppSkuInfo;
 import com.azure.resourcemanager.iotcentral.models.AppTemplate;
+import com.azure.resourcemanager.iotcentral.models.NetworkAction;
+import com.azure.resourcemanager.iotcentral.models.NetworkRuleSetIpRule;
+import com.azure.resourcemanager.iotcentral.models.NetworkRuleSets;
 import com.azure.resourcemanager.iotcentral.models.Operation;
+import com.azure.resourcemanager.iotcentral.models.PublicNetworkAccess;
 import com.azure.resourcemanager.iotcentral.models.SystemAssignedServiceIdentity;
 import com.azure.resourcemanager.iotcentral.models.SystemAssignedServiceIdentityType;
+import com.azure.resourcemanager.iotcentral.models.PrivateEndpointConnection;
+import com.azure.resourcemanager.iotcentral.models.PrivateLinkResource;
 
 public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
-    private static String defaultLocation = "eastus";
+    private static String defaultLocation = "eastus2";
 
     public IotCentralMgmtApiSample() throws IOException {
         super();
@@ -38,7 +46,6 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
         PagedIterable < AppTemplate > templates = manager.apps().listTemplates(Context.NONE);
 
         printHeader("IOT Central App Templates:");
-        // System.out.printf("Name: %s.%n", Arrays.toString(templates.stream().map(AppTemplate::name).toArray()), ",");
         for (AppTemplate template: templates) {
             System.out.println(template.manifestId());
         }
@@ -54,6 +61,40 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
         printHeader("Apps in Resource Group:");
         for (App app: apps) {
             System.out.println("Name:" + app.name() + ", Location: " + app.regionName());
+        }
+        System.out.println();
+    }
+    
+    /**
+     * Retrieves PrivateLink information about the IoT Central application.
+     **/
+    public static void appsGetPrivateLinks(
+        IotCentralManager manager,
+        String resourceGroupName,
+        String appName){
+            
+        PagedIterable < PrivateLinkResource > privateLinkList = manager.privateLinks().list(resourceGroupName, appName);
+
+        printHeader("Printing Available Private Links");
+        for (PrivateLinkResource privateLink: privateLinkList) {
+            System.out.println(privateLink.name() + " " + privateLink.id());
+        }
+        System.out.println();
+    }
+
+    /**
+     * Retrieves PrivateEndpointConnection information about the IoT Central application.
+     **/
+    public static void appsGetPrivateEndpointConnections(
+        IotCentralManager manager,
+        String resourceGroupName,
+        String appName){
+
+        PagedIterable < PrivateEndpointConnection > privateEndpointConnectionList = manager.privateEndpointConnections().list(resourceGroupName, appName);
+    
+        printHeader("Printing Available Private Endpoint Connections");
+        for (PrivateEndpointConnection priveateEndPointConncetion: privateEndpointConnectionList) {
+            System.out.println(priveateEndPointConncetion.name() + " " + priveateEndPointConncetion.id());
         }
         System.out.println();
     }
@@ -85,9 +126,7 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
             .withTemplate("iotc-distribution")
             .create();
 
-        Thread.sleep(10000);
         System.out.println("App created successfully.");
-
         return randomizedAppName;
     }
 
@@ -104,7 +143,15 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
         com.azure.resourcemanager.iotcentral.models.App app =
             manager.apps().getByResourceGroupWithResponse(resourceGroupName, appName, Context.NONE).getValue();
 
-        System.out.println("Name:" + app.name() + ", Location: " + app.regionName() + ", " + app.toString() + "\n");
+        boolean hasNetworkingRules = app.networkRuleSets().ipRules().isEmpty();
+        if(hasNetworkingRules){
+            System.out.println("Name:" + app.name() + ", Display Name: " + app.displayName() +", Location: " + app.regionName() + ", " + app.toString());
+        }else{
+            String filterName = app.networkRuleSets().ipRules().get(0).filterName();
+            String ipMask = app.networkRuleSets().ipRules().get(0).ipMask();
+            System.out.println("Name:" + app.name() + ", Display Name: " + app.displayName() +", Location: " + app.regionName() + ", IP Rules: " + filterName + " : " + ipMask +  ", " + app.toString());
+        }
+        System.out.println();
     }
     
     /** 
@@ -117,6 +164,7 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
 
         printHeader("Update App:");
 
+        NetworkRuleSets networkRuleSets = setNetworkRules();
         App resource =
             manager.apps().getByResourceGroupWithResponse(resourceGroupName, appName, Context.NONE).getValue();
         resource
@@ -124,9 +172,10 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
             .withIdentity(
                 new SystemAssignedServiceIdentity().withType(SystemAssignedServiceIdentityType.SYSTEM_ASSIGNED))
             .withDisplayName(appName + "- new display name")
+            .withPublicNetworkAccess(PublicNetworkAccess.ENABLED)
+            .withNetworkRuleSets(networkRuleSets)
             .apply();
 
-        Thread.sleep(10000);
         System.out.println("App updated successfully.\n");
     }
 
@@ -186,7 +235,7 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
      * Validates error when using an invalid SKU. This change (lack of support for S1 sku) was introduced in 2021-06-01 APIs.
     **/
     public static void appsCreateOrUpdateWithInvalidSku(
-        com.azure.resourcemanager.iotcentral.IotCentralManager manager,
+        IotCentralManager manager,
         String resourceGroupName,
         String appName,
         String skuName) {
@@ -249,6 +298,18 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
                 System.err.println("ERROR: Expected correct exception for F1 sku!");
             }
         }
+    }
+
+    private static NetworkRuleSets setNetworkRules(){
+        NetworkRuleSetIpRule ipRules = new NetworkRuleSetIpRule()
+            .withFilterName("Localhost")
+            .withIpMask("127.0.0.1");
+        NetworkRuleSets setNetworkRules = new NetworkRuleSets()
+            .withApplyToDevices(true)
+            .withApplyToIoTCentral(false)
+            .withDefaultAction(NetworkAction.ALLOW)
+            .withIpRules(Arrays.asList(ipRules));
+        return setNetworkRules;
     }
 
     private static void printHeader(String headerName) {
