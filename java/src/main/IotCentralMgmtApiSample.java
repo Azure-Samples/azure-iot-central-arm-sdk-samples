@@ -71,7 +71,7 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
     public static void appsGetPrivateLinks(
         IotCentralManager manager,
         String resourceGroupName,
-        String appName){
+        String appName) {
             
         PagedIterable < PrivateLinkResource > privateLinkList = manager.privateLinks().list(resourceGroupName, appName);
 
@@ -88,7 +88,7 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
     public static void appsGetPrivateEndpointConnections(
         IotCentralManager manager,
         String resourceGroupName,
-        String appName){
+        String appName) {
 
         PagedIterable < PrivateEndpointConnection > privateEndpointConnectionList = manager.privateEndpointConnections().list(resourceGroupName, appName);
     
@@ -144,9 +144,9 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
             manager.apps().getByResourceGroupWithResponse(resourceGroupName, appName, Context.NONE).getValue();
 
         boolean hasNetworkingRules = app.networkRuleSets().ipRules().isEmpty();
-        if(hasNetworkingRules){
+        if(hasNetworkingRules) {
             System.out.println("Name:" + app.name() + ", Display Name: " + app.displayName() +", Location: " + app.regionName() + ", " + app.toString());
-        }else{
+        } else {
             String filterName = app.networkRuleSets().ipRules().get(0).filterName();
             String ipMask = app.networkRuleSets().ipRules().get(0).ipMask();
             System.out.println("Name:" + app.name() + ", Display Name: " + app.displayName() +", Location: " + app.regionName() + ", IP Rules: " + filterName + " : " + ipMask +  ", " + app.toString());
@@ -300,7 +300,7 @@ public class IotCentralMgmtApiSample extends IotCentralMgmtApiSampleBase {
         }
     }
 
-    private static NetworkRuleSets setNetworkRules(){
+    private static NetworkRuleSets setNetworkRules() {
         NetworkRuleSetIpRule ipRules = new NetworkRuleSetIpRule()
             .withFilterName("Localhost")
             .withIpMask("127.0.0.1");

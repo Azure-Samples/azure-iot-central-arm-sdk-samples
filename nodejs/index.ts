@@ -52,7 +52,7 @@ async function checkIfNameExist(creds): Promise<IotCentralClient> {
 async function createOrUpdateApp(client): Promise<IotCentralClient> {
     console.log("\nCreating or updating");
     const result = await client.apps.beginCreateOrUpdateAndWait(RESOURCEGROUPNAME, RESOURCENAME, NEWAPP);
-    console.log(result)
+    console.log(result);
     return new Promise<IotCentralClient>(resolve => resolve(client));
 }
 
@@ -79,7 +79,7 @@ async function updateApp(client): Promise<IotCentralClient> {
 // List all apps under the resource group
 async function listAllAppsByResourceGroup(client): Promise<IotCentralClient> {
     console.log("\nAll Apps in Resource Group")
-    for await (const result of client.apps.listByResourceGroup(RESOURCEGROUPNAME)){
+    for await (const result of client.apps.listByResourceGroup(RESOURCEGROUPNAME)) {
         console.log(result)
     }
     return new Promise<IotCentralClient>(resolve => resolve(client));
@@ -88,7 +88,7 @@ async function listAllAppsByResourceGroup(client): Promise<IotCentralClient> {
 // List all the operations that are supported by IOTC
 async function retrieveOperations(client): Promise<IotCentralClient> {
     console.log("\nRetrieve Operations")
-    for await (const result of client.operations.list()){
+    for await (const result of client.operations.list()) {
         console.log(result.name)
     }
     return new Promise<IotCentralClient>(resolve => resolve(client));
@@ -97,7 +97,7 @@ async function retrieveOperations(client): Promise<IotCentralClient> {
 // List all the iotc app templates
 async function retrieveAppTemplates(client): Promise<IotCentralClient> {
     console.log("\nApp Templates")
-    for await (const result of client.apps.listTemplates()){
+    for await (const result of client.apps.listTemplates()) {
         console.log(result.name)
     }
     return new Promise<IotCentralClient>(resolve => resolve(client));
@@ -106,7 +106,7 @@ async function retrieveAppTemplates(client): Promise<IotCentralClient> {
 // List all private endpoint connections
 async function retrievePrivateEndpointConnections(client): Promise<IotCentralClient> {
     console.log("\nPrivate Endpoint Connections")
-    for await (const result of client.privateEndpointConnections.list(RESOURCEGROUPNAME, RESOURCENAME)){
+    for await (const result of client.privateEndpointConnections.list(RESOURCEGROUPNAME, RESOURCENAME)) {
         console.log(result.privateEndpoint)
     }
     return new Promise<IotCentralClient>(resolve => resolve(client));
@@ -115,7 +115,7 @@ async function retrievePrivateEndpointConnections(client): Promise<IotCentralCli
 // List all private links
 async function retrievePrivateLinks(client): Promise<IotCentralClient> {
     console.log("\nAll Private Links in App")
-    for await (const result of client.privateLinks.list(RESOURCEGROUPNAME, RESOURCENAME)){
+    for await (const result of client.privateLinks.list(RESOURCEGROUPNAME, RESOURCENAME)) {
         console.log(result.name, result.id)
     }
     return new Promise<IotCentralClient>(resolve => resolve(client));
