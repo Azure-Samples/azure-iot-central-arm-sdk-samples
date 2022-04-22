@@ -18,6 +18,8 @@ See more samples on using IoT Central APIs [here](https://github.com/Azure/azure
 ### Usage
 To begin, clone this repository, update the authentication settings in IotCentralMgmtApiSampleBase.java, the app configurations in Main.java, and compile/execute the project.
 
+Run the below command in the directory where pom.xml is in
+
 ```
 mvn clean compile exec:java
 ```

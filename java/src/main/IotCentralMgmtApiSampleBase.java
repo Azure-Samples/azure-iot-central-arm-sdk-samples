@@ -6,8 +6,6 @@ import com.azure.identity.DeviceCodeCredentialBuilder;
 
 
 public class IotCentralMgmtApiSampleBase {
-    protected static final String AZURE_CLIENT_ID = "Azure Client ID";
-    protected static final String AZURE_CLIENT_SECRET = "Azure Client Secret";
     protected static final String AZURE_TENANT_ID = "Azure Tenant ID";
     protected static final String AZURE_SUBSCRIPTION_ID = "Azure Subscription";
 
