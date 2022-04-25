@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "target": "ES6",
+        "target": "ES2018",
         "outDir": "dist",
-        "module": "commonjs"
+        "module": "commonjs",
     }
 }

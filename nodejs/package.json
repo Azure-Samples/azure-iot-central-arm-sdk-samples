@@ -10,8 +10,11 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@azure/arm-iotcentral": "^6.0.0",
-        "@azure/identity": "^2.0.4",
-        "@azure/arm-resources": "^5.0.0"
+        "@azure/arm-iotcentral": "^7.0.0-beta.1",
+        "@azure/arm-resources": "^5.0.0",
+        "@azure/identity": "^2.0.4"
+    },
+    "devDependencies": {
+        "@types/node": "^17.0.25"
     }
 }
